@@ -6,6 +6,7 @@ Welcome to HoneyFramework! In this exciting and engaging text-based game, you st
 
 ## Game Features
 
+[ I should mention that I goofed up tracking the source code changes, so I might've missed some features. But don't worry, they're still in the game and ready to go!]
 - **Bee Recruitment**: Start with one bee and expand your bee family by buying more bees. More bees mean more honey!
 - **Honey Production**: Each bee produces one honey pot every four minutes. Watch your honey pots increase and your wealth grow!
 - **Manuka Honey Production (New!)**: Introducing Manuka honey, a special type of honey produced from the Manuka bush. Purchase and maintain Manuka bushes to produce this valuable resource alongside regular honey.
