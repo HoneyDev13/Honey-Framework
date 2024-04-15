@@ -24,6 +24,8 @@ class HoneyFramework:
         self.bee_production_interval = 240  # 4 minutes in seconds
         self.last_production_time = time.time()
         self.manuka_bush_cost = 1000  # Cost of purchasing a Manuka bush
+        self.honey_price = 10  # Initial price of honey
+        self.manuka_honey_price = 100  # Initial price of Manuka honey
         self.initialize_bees()
 
     def initialize_bees(self):
@@ -42,6 +44,7 @@ class HoneyFramework:
             print(f"You now have {self.honey} honey pots and {self.manuka_honey} Manuka honey pots.")
             self.check_level_up()
             self.random_event()
+            self.update_market_prices()
         else:
             print(f"You need to wait {int(self.bee_production_interval - time_elapsed)} more seconds before honey production.")
 
@@ -55,7 +58,7 @@ class HoneyFramework:
         self.manuka_honey += manuka_honey_produced
 
     def sell_honey(self):
-        total_money = self.honey * 15 + self.manuka_honey * 100  # Manuka honey sells for a higher price
+        total_money = self.honey * self.honey_price + self.manuka_honey * self.manuka_honey_price
         self.money += total_money
         print(f"You sold your honey and Manuka honey for a total of ${total_money}.")
         self.honey = 0
@@ -132,6 +135,12 @@ class HoneyFramework:
                 self.buy_manuka_bush()
             elif choice == '5':
                 self.buy_bonus()
+            elif choice.lower() == 'quit':
+                print("Exiting the game...")
+                break
+            else:
+                print("Invalid choice.")
 
-HoneyFramework = HoneyFramework()
-HoneyFramework.play()
+if __name__ == "__main__":
+    HoneyFramework = HoneyFramework()
+    HoneyFramework.play()
