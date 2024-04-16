@@ -6,18 +6,6 @@ class Bee:
         self.name = name
         self.cost = cost
 
-class CarpenterBee(Bee):
-    def __init__(self):
-        super().__init__("Carpenter Bee", 300)
-
-class ScoutBee(Bee):
-    def __init__(self):
-        super().__init__("Scout Bee", 400)
-
-class GuardianBee(Bee):
-    def __init__(self):
-        super().__init__("Guardian Bee", 600)
-
 class ManukaBush:
     def __init__(self, cost):
         self.cost = cost
@@ -51,9 +39,6 @@ class HoneyFramework:
         self.bees.append(Bee("Worker Bee", 100))
         self.bees.append(Bee("Drone Bee", 200))
         self.bees.append(Bee("Queen Bee", 500))
-        self.bees.append(CarpenterBee())
-        self.bees.append(ScoutBee())
-        self.bees.append(GuardianBee())
 
     def wait(self):
         current_time = time.time()
@@ -65,16 +50,13 @@ class HoneyFramework:
             print(f"You now have {self.honey} honey pots and {self.manuka_honey} Manuka honey pots.")
             self.check_level_up()
             self.random_event()
+            self.update_market_prices()
             self.check_quests()
         else:
             print(f"You need to wait {int(self.bee_production_interval - time_elapsed)} more seconds before honey production.")
 
     def produce_honey(self):
         honey_produced = len(self.bees)
-        # Count Carpenter Bees twice for faster hive construction
-        for bee in self.bees:
-            if isinstance(bee, CarpenterBee):
-                honey_produced += 1
         self.honey += honey_produced
 
     def produce_manuka_honey(self):
@@ -94,7 +76,7 @@ class HoneyFramework:
         print("Available bees to buy:")
         for i, bee in enumerate(self.bees):
             print(f"{i+1}. {bee.name} - Cost: ${bee.cost}")
-        choice = input("Choose a bee to buy (1-6): ")
+        choice = input("Choose a bee to buy (1-3): ")
         try:
             choice = int(choice)
             if 1 <= choice <= len(self.bees):
@@ -126,6 +108,71 @@ class HoneyFramework:
         else:
             print("You don't have enough money to buy the bonus.")
 
+    def upgrade_bee(self):
+        print("Available upgrades:")
+        # Define available upgrades and their costs
+        upgrades = {
+            "Increase production rate": 200,
+            "Unlock special ability": 500,
+            # Add more upgrades as desired
+        }
+        for i, (upgrade, cost) in enumerate(upgrades.items(), 1):
+            print(f"{i}. {upgrade} - Cost: ${cost}")
+        choice = input("Choose an upgrade: ")
+        try:
+            choice = int(choice)
+            if 1 <= choice <= len(upgrades):
+                selected_upgrade = list(upgrades.keys())[choice - 1]
+                upgrade_cost = list(upgrades.values())[choice - 1]
+                if self.money >= upgrade_cost:
+                    # Apply selected upgrade
+                    # Logic for upgrading bees goes here
+                    self.money -= upgrade_cost
+                    print(f"You upgraded your bees with {selected_upgrade}!")
+                else:
+                    print("You don't have enough money to buy this upgrade.")
+            else:
+                print("Invalid choice.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    def research_and_development(self):
+        print("Available research options:")
+        # Define available research options and their costs
+        research_options = {
+            "Increase bee production interval": 500,
+            "Expand honey storage capacity": 1000,
+            # Add more research options as desired
+        }
+        for i, (option, cost) in enumerate(research_options.items(), 1):
+            print(f"{i}. {option} - Cost: ${cost}")
+        choice = input("Choose a research option: ")
+        try:
+            choice = int(choice)
+            if 1 <= choice <= len(research_options):
+                selected_option = list(research_options.keys())[choice - 1]
+                research_cost = list(research_options.values())[choice - 1]
+                if self.money >= research_cost:
+                    # Apply selected research option
+                    # Logic for research and development goes here
+                    self.money -= research_cost
+                    print(f"You invested in {selected_option}!")
+                else:
+                    print("You don't have enough money to invest in this option.")
+            else:
+                print("Invalid choice.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    def buy_production_boost(self):
+        if self.money >= self.production_boost_cost:
+            # Apply production boost
+            # Logic for applying production boost goes here
+            self.money -= self.production_boost_cost
+            print("You bought a honey production boost!")
+        else:
+            print("You don't have enough money to buy a honey production boost.")
+
     def check_level_up(self):
         if self.honey >= self.level * 100:
             self.level += 1
@@ -156,7 +203,7 @@ class HoneyFramework:
 
     def play(self):
         while True:
-            print("\n1. Wait for more honey\n2. Sell honey\n3. Buy a bee\n4. Buy a Manuka bush\n5. Buy 2x honey bonus\n6. Check achievements\n7. Quit")
+            print("\n1. Wait for more honey\n2. Sell honey\n3. Buy a bee\n4. Buy a Manuka bush\n5. Buy 2x honey bonus\n6. Upgrade bees\n7. Research & Development\n8. Buy production boost\n9. Check achievements\n10. Quit")
             choice = input("Choose an action: ")
             if choice == '1':
                 self.wait()
@@ -169,10 +216,16 @@ class HoneyFramework:
             elif choice == '5':
                 self.buy_bonus()
             elif choice == '6':
+                self.upgrade_bee()
+            elif choice == '7':
+                self.research_and_development()
+            elif choice == '8':
+                self.buy_production_boost()
+            elif choice == '9':
                 print("Achievements:")
                 for achievement in self.achievements:
                     print(achievement)
-            elif choice == '7':
+            elif choice == '10':
                 print("Exiting the game...")
                 break
             else:
