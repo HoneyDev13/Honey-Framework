@@ -33,6 +33,10 @@ class HoneyFramework:
         self.manuka_honey_price = 100  # Initial price of Manuka honey
         self.production_boost_cost = 2000  # Cost of purchasing a honey production boost
         self.initialize_bees()
+        
+        # New research-related attributes
+        self.bee_production_interval_researched = False
+        self.honey_storage_capacity_researched = False
 
     def initialize_bees(self):
         # Define different types of bees
@@ -230,7 +234,48 @@ class HoneyFramework:
                 break
             else:
                 print("Invalid choice.")
-
+                
+    def research_and_development(self):
+        print("Available research options:")
+        research_options = {
+            "Increase bee production interval": 500,
+            "Expand honey storage capacity": 1000,
+            "Decrease bee production interval": 1500,  # New research option
+            # Add more research options as desired
+        }
+        for i, (option, cost) in enumerate(research_options.items(), 1):
+            print(f"{i}. {option} - Cost: ${cost}")
+        choice = input("Choose a research option: ")
+        try:
+            choice = int(choice)
+            if 1 <= choice <= len(research_options):
+                selected_option = list(research_options.keys())[choice - 1]
+                research_cost = list(research_options.values())[choice - 1]
+                if self.money >= research_cost:
+                    # Apply selected research option
+                    if selected_option == "Increase bee production interval":
+                        self.bee_production_interval_researched = True
+                        self.bee_production_interval -= 60  # Decrease production interval by 1 minute
+                    elif selected_option == "Expand honey storage capacity":
+                        self.honey_storage_capacity_researched = True
+                        # Increase honey storage capacity
+                        self.honey_storage_capacity += 10
+                    elif selected_option == "Decrease bee production interval":
+                        if not self.bee_production_interval_researched:
+                            print("You need to research 'Increase bee production interval' first.")
+                            return
+                        self.money -= research_cost
+                        print("You researched a new bee production method!")
+                    else:
+                        print(f"You invested in {selected_option}!")
+                    self.money -= research_cost
+                    print(f"You invested in {selected_option}!")
+                else:
+                    print("You don't have enough money to invest in this option.")
+            else:
+                print("Invalid choice.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
 if __name__ == "__main__":
     HoneyFramework = HoneyFramework()
     HoneyFramework.play()
